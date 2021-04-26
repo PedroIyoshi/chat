@@ -1,6 +1,7 @@
 from socket import socket,AF_INET,SOCK_STREAM
 from threading import Thread
- 
+from gui import interface
+
 #classe para manipular o socket
 class Send:
  def __init__(self):
@@ -34,11 +35,7 @@ def esperar(tcp,send,host='localhost',port=5000):
    print(str(msg,'utf-8'))
  
 if __name__ == '__main__':
- print('Digite o nome ou IP do servidor(localhost): ')
- host=input()
-  
- if host=='':
-  host = '127.0.0.1'
+ host = '127.0.0.1'
   
  #cria um socket
  tcp=socket(AF_INET,SOCK_STREAM)

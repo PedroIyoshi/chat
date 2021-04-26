@@ -12,17 +12,21 @@ class interface():
         self.chat = scrolledtext.ScrolledText()
         self.mensagem = scrolledtext.ScrolledText()
         self.mensagem.vbar.pack_forget()
-        self.enviar = Button(text="Enviar")
+        self.enviar = Button(text="Enviar", command= lambda: 
+            self.sendText(str(self.mensagem.get(0.0, END))))
 
+        self.chat.config(state=DISABLED)
         self.chat.place(x=10, y=10, width=600, height=300)
         self.mensagem.place(x=10, y=320, width=540, height=50)
         self.enviar.place(x=560, y=320, width=50, height=50)
 
-        # self.chat.grid(column=1, row=1, columnspan=2, padx=20, pady=20)
-        # self.mensagem.grid(column=1, row=2, sticky="ew")
-        # self.enviar.grid(column=2, row=2, sticky="e")
+    def printMessage(self, texto):
+        self.chat.config(state=NORMAL)
+        self.chat.insert(INSERT, "Você: " + texto)
+        self.chat.config(state=DISABLED)
 
-
+    def sendText(self, texto):
+        self.printMessage(texto)
 
 root = Tk()
 root.title("Chat")
