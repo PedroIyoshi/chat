@@ -4,7 +4,20 @@ from tkinter import *
 from gui import interface
 
 
-# classe para manipular o socket
+def mensagem(texto):
+    send.put(texto)
+
+
+def desconecta():
+    root.destroy()
+    tcp.close()
+    exit(-1)
+
+root = Tk()
+root.protocol("WM_DELETE_WINDOW", desconecta)
+gui = interface(root, mensagem)
+
+
 class Send:
     def __init__(self):
         self.__msg = ''
@@ -13,7 +26,7 @@ class Send:
 
     def put(self, msg):
         self.__msg = msg
-        if self.con != None:
+        if self.con is not None:
             # envia um mensagem atravez de uma conexão socket
             self.con.send(str.encode(self.__msg))
 
@@ -35,37 +48,28 @@ def esperar(tcp, send, host='', port=5000):
     while True:
         # aceita um conexão
         con, cliente = tcp.accept()
-        print('Cliente ', cliente, ' conectado!')
+        gui.printMessage('Cliente ' + str(cliente) + ' conectado!')
         # atribui a conexão ao manipulador
         send.con = con
 
         while True:
             # aceita uma mensagem
             msg = con.recv(1024)
-            if not msg: break
+            if not msg:
+                break
             print(str(msg, 'utf-8'))
+            gui.printMessage("Outro: " + str(msg, 'utf-8'))
 
 
 if __name__ == '__main__':
-    root = Tk()
-
     # cria um socket
     tcp = socket(AF_INET, SOCK_STREAM)
     send = Send()
     # cria um Thread e usa a função esperar com dois argumentos
     processo = Thread(target=esperar, args=(tcp, send))
-
-
     processo.start()
+    root.mainloop()
 
-    print('Iniciando o servidor de chat!')
-    print('Aguarde alguém conectar!')
+    gui.printMessage('Iniciando o servidor do chat')
+    gui.printMessage('Aguarde alguém se conectar')
 
-    msg = input()
-    while True:
-        send.put(msg)
-        msg = input()
-
-    processo.join()
-    tcp.close()
-    exit()

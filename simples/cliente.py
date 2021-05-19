@@ -6,12 +6,13 @@ from gui import interface
 
 
 def mensagem(text):
-    send.put('Você: ' + text)
+    send.put(text)
 
 
 def desconecta():
     root.destroy()
     tcp.close()
+    exit(-1)
 
 
 root = Tk()

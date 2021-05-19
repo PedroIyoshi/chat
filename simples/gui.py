@@ -7,7 +7,6 @@ class interface:
     def __init__(self, master=None, send=None):
         master.config(width=620, height=380)
         self.componentes(send)
-        server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def componentes(self, send):
         self.chat = scrolledtext.ScrolledText()
@@ -23,10 +22,10 @@ class interface:
 
     def printMessage(self, texto):
         self.chat.config(state=NORMAL)
-        self.chat.insert(INSERT, texto)
+        self.chat.insert(INSERT, texto+"\n")
         self.chat.config(state=DISABLED)
 
     def sendText(self, send, texto):
         send(texto)
-        self.printMessage(texto)
+        self.printMessage('Você: ' + texto)
 
